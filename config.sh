@@ -34,6 +34,7 @@ if [ -n "$IS_OSX" ]; then
         export CXX=clang++
         install_pkg_config
         # 32-bit wheel
+        export ABI="32"
         export CFLAGS="-arch i386"
         export FFLAGS="-arch i386"
         export LDFLAGS="-arch i386"
@@ -49,6 +50,7 @@ if [ -n "$IS_OSX" ]; then
         build_pip_wheel "$repo_dir"
         mv ${wheelhouse}/*whl $wheelhouse32
         # 64-bit wheel
+        export ABI="64"
         export CFLAGS="-arch x86_64"
         export FFLAGS="-arch x86_64"
         export LDFLAGS="-arch x86_64"
