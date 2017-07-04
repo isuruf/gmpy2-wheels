@@ -39,7 +39,7 @@ if [ -n "$IS_OSX" ]; then
         export LDFLAGS="-arch i386"
         # Build libraries
         source multibuild/library_builders.sh
-        build_libs
+        pre_build
         # Build wheel
         local py_ld_flags="-Wall -undefined dynamic_lookup -bundle"
         local wheelhouse32=${wheelhouse}32
@@ -55,7 +55,7 @@ if [ -n "$IS_OSX" ]; then
         unset LDSHARED
         # Force rebuild of all libs
         rm *-stamp
-        build_libs
+        pre_build
         # Build wheel
         export LDFLAGS="$LDFLAGS $py_ld_flags"
         export LDSHARED="clang $LDFLAGS $py_ld_flags"
