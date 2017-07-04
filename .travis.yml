@@ -92,7 +92,7 @@ matrix:
 
 before_install:
   - if [ ! -z ${TRAVIS_TAG} ]; then export BUILD_COMMIT=${TRAVIS_TAG}; fi
-  - if [ -z ${TRAVIS_TAG} ]; then cd gmpy && git pull origin master && export BUILD_COMMIT=`git rev-parse HEAD` && cd ..; fi
+  - if [ -z ${TRAVIS_TAG} ]; then cd gmpy2 && git pull origin master && export BUILD_COMMIT=`git rev-parse HEAD` && cd ..; fi
   - source multibuild/common_utils.sh
   - source multibuild/travis_steps.sh
   - before_install
