@@ -1,30 +1,17 @@
-function build_gmp {
-    local version=$1
-    local url=$2
-    if [ -e gmp-stamp ]; then
-       return;
-    fi
-    fetch_unpack $url/gmp-${version}.tar.bz2
-    (cd gmp-${version} \
-        && ./configure --prefix=$BUILD_PREFIX --enable-fat --disable-shared --enable-static  --with-pic \
-        && make \
-        && make install)
-    touch gmp-stamp
-}
-
-
 function build_simple2 {
     local name=$1
     local version=$2
     local url=$3
+    local ext=$4
+    shift 4
     if [ -e "${name}-stamp" ]; then
         return
     fi
     local name_version="${name}-${version}"
-    local targz=${name_version}.tar.gz
+    local targz=${name_version}.$4
     fetch_unpack $url/$targz
     (cd $name_version \
-        && ./configure --prefix=$BUILD_PREFIX --disable-shared --enable-static  --with-pic \
+        && ./configure --prefix=$BUILD_PREFIX $* \
         && make \
         && make install)
     touch "${name}-stamp"
@@ -32,9 +19,12 @@ function build_simple2 {
 
 function pre_build {
     set -x
-    build_gmp 6.1.2 https://gmplib.org/download/gmp
-    build_simple2 mpfr 3.1.5 http://ftp.gnu.org/gnu/mpfr
-    build_simple2 mpc 1.0.3 http://www.multiprecision.org/mpc/download
+    build_simple2 gmp  6.1.2 https://gmplib.org/download/gmp tar.bz2 \
+        --disable-shared --enable-static --with-pic --enable-fat
+    build_simple2 mpfr 3.1.5 http://ftp.gnu.org/gnu/mpfr tar.gz     \
+        --disable-shared --enable-static --with-pic --with-gmp=$BUILD_PREFIX
+    build_simple2 mpc  1.0.3 http://www.multiprecision.org/mpc/download tar.gz \
+        --disable-shared --enable-static --with-pic --with-gmp=$BUILD_PREFIX --with-mpfr=$BUILD_PREFIX
 }
 
 function run_tests {
