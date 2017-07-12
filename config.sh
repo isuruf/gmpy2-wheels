@@ -8,7 +8,7 @@ function build_simple2 {
         return
     fi
     local name_version="${name}-${version}"
-    local targz=${name_version}.$4
+    local targz=${name_version}.$ext
     fetch_unpack $url/$targz
     (cd $name_version \
         && ./configure --prefix=$BUILD_PREFIX $* \
