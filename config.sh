@@ -6,7 +6,7 @@ function build_gmp {
     fi
     fetch_unpack $url/gmp-${version}.tar.bz2
     (cd gmp-${version} \
-        && ./configure --prefix=$BUILD_PREFIX --enable-fat --disable-shared --enable-static \
+        && ./configure --prefix=$BUILD_PREFIX --enable-fat --disable-shared --enable-static  --with-pic \
         && make \
         && make install)
     touch gmp-stamp
@@ -24,7 +24,7 @@ function build_simple2 {
     local targz=${name_version}.tar.gz
     fetch_unpack $url/$targz
     (cd $name_version \
-        && ./configure --prefix=$BUILD_PREFIX --disable-shared --enable-static \
+        && ./configure --prefix=$BUILD_PREFIX --disable-shared --enable-static  --with-pic \
         && make \
         && make install)
     touch "${name}-stamp"
@@ -32,7 +32,6 @@ function build_simple2 {
 
 function pre_build {
     set -x
-    export CFLAGS="-fPIC ${CFLAGS}"
     build_gmp 6.1.2 https://gmplib.org/download/gmp
     build_simple2 mpfr 3.1.5 http://ftp.gnu.org/gnu/mpfr
     build_simple2 mpc 1.0.3 http://www.multiprecision.org/mpc/download
