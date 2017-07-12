@@ -43,6 +43,11 @@ function run_tests {
     python -c "import gmpy2"
 }
 
+function pip_wheel_cmd {
+    local abs_wheelhouse=$1
+    pip wheel --build-option --static=$BUILD_PREFIX $(pip_opts) -w $abs_wheelhouse --no-deps .
+}
+
 if [ -n "$IS_OSX" ]; then
     function build_wheel {
         local repo_dir=${1:-$REPO_DIR}
