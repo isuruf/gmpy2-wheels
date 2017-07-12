@@ -6,17 +6,35 @@ function build_gmp {
     fi
     fetch_unpack $url/gmp-${version}.tar.bz2
     (cd gmp-${version} \
-        && ./configure --prefix=$BUILD_PREFIX --enable-fat --enable-shared \
+        && ./configure --prefix=$BUILD_PREFIX --enable-fat --disable-shared --enable-static \
         && make \
         && make install)
     touch gmp-stamp
 }
 
+
+function build_simple2 {
+    local name=$1
+    local version=$2
+    local url=$3
+    if [ -e "${name}-stamp" ]; then
+        return
+    fi
+    local name_version="${name}-${version}"
+    local targz=${name_version}.tar.gz
+    fetch_unpack $url/$targz
+    (cd $name_version \
+        && ./configure --prefix=$BUILD_PREFIX --disable-shared --enable-static \
+        && make \
+        && make install)
+    touch "${name}-stamp"
+}
+
 function pre_build {
     set -x
     build_gmp 6.1.2 https://gmplib.org/download/gmp
-    build_simple mpfr 3.1.5 http://ftp.gnu.org/gnu/mpfr
-    build_simple mpc 1.0.3 http://www.multiprecision.org/mpc/download
+    build_simple2 mpfr 3.1.5 http://ftp.gnu.org/gnu/mpfr
+    build_simple2 mpc 1.0.3 http://www.multiprecision.org/mpc/download
 }
 
 function run_tests {
@@ -66,26 +84,6 @@ if [ -n "$IS_OSX" ]; then
         for whl in ${wheelhouse}/*.whl; do
             delocate-fuse "$whl" "${wheelhouse32}/$(basename $whl)"
         done
-    }
-
-    function repair_wheelhouse {
-        local wheelhouse=$1
-        check_pip
-        $PIP_CMD install delocate
-        delocate-listdeps $wheelhouse/*.whl # lists library dependencies
-        # repair_wheelhouse can take more than 10 minutes without generating output
-        # but jobs that do not generate output within 10 minutes are aborted by travis-ci.
-        # Echoing something here solves the problem.
-        echo in repair_wheelhouse, executing delocate-wheel
-        delocate-wheel --verbose $wheelhouse/*.whl # copies library dependencies into wheel
-        # Add platform tags to label wheels as compatible with OSX 10.9 and
-        # 10.10.  The wheels will be built against Python.org Python, and so will
-        # in fact be compatible with OSX >= 10.6.  pip < 6.0 doesn't realize
-        # this, so, in case users have older pip, add platform tags to specify
-        # compatibility with later OSX.  Not necessary for OSX released well
-        # after pip 6.0.  See:
-        # https://github.com/MacPython/wiki/wiki/Spinning-wheels#question-will-pip-give-me-a-broken-wheel
-        delocate-addplat --rm-orig -x 10_9 -x 10_10 $wheelhouse/*.whl
     }
 fi
 
