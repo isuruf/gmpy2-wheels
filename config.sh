@@ -32,6 +32,7 @@ function build_simple2 {
 
 function pre_build {
     set -x
+    export CFLAGS="-fPIC ${CFLAGS}"
     build_gmp 6.1.2 https://gmplib.org/download/gmp
     build_simple2 mpfr 3.1.5 http://ftp.gnu.org/gnu/mpfr
     build_simple2 mpc 1.0.3 http://www.multiprecision.org/mpc/download
