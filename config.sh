@@ -40,6 +40,7 @@ function pip_wheel_cmd {
 
 if [ -n "$IS_OSX" ]; then
     function build_wheel {
+        export MACOSX_DEPLOYMENT_TARGET=10.6
         local repo_dir=${1:-$REPO_DIR}
         local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
         # Build dual arch wheel
