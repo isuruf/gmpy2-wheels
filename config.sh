@@ -11,7 +11,7 @@ function build_simple2 {
     local targz=${name_version}.$ext
     fetch_unpack $url/$targz
     (cd $name_version \
-        && ./configure --prefix=$BUILD_PREFIX $* \
+        && ((./configure --prefix=$BUILD_PREFIX $*) || (cat config.log && exit 1))  \
         && make \
         && make install)
     touch "${name}-stamp"
