@@ -84,7 +84,7 @@ matrix:
         - MB_PYTHON_VERSION=3.6
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew uninstall gmp; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew uninstall gmp mpfr mpc; fi
   - if [ ! -z ${TRAVIS_TAG} ]; then export BUILD_COMMIT=${TRAVIS_TAG}; fi
   - if [ -z ${TRAVIS_TAG} ]; then cd gmpy2 && git pull origin master && export BUILD_COMMIT=`git rev-parse HEAD` && cd ..; fi
   - source multibuild/common_utils.sh
