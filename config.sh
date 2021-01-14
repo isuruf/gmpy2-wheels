@@ -38,48 +38,4 @@ function pip_wheel_cmd {
     pip wheel --build-option --static=$BUILD_PREFIX $(pip_opts) -w $abs_wheelhouse --no-deps .
 }
 
-if [ -n "$IS_OSX" ]; then
-    function build_wheel {
-        export MACOSX_DEPLOYMENT_TARGET=10.6
-        local repo_dir=${1:-$REPO_DIR}
-        local wheelhouse=$(abspath ${WHEEL_SDIR:-wheelhouse})
-        # Build dual arch wheel
-        export CC=clang
-        export CXX=clang++
-        install_pkg_config
-        # 32-bit wheel
-        export ABI="32"
-        export CFLAGS="-arch i386"
-        export FFLAGS="-arch i386"
-        export LDFLAGS="-arch i386"
-        # Build libraries
-        source multibuild/library_builders.sh
-        pre_build
-        # Build wheel
-        local py_ld_flags="-Wall -undefined dynamic_lookup -bundle"
-        local wheelhouse32=${wheelhouse}32
-        mkdir -p $wheelhouse32
-        export LDFLAGS="$LDFLAGS $py_ld_flags"
-        export LDSHARED="clang $LDFLAGS $py_ld_flags"
-        build_pip_wheel "$repo_dir"
-        mv ${wheelhouse}/*whl $wheelhouse32
-        # 64-bit wheel
-        export ABI="64"
-        export CFLAGS="-arch x86_64"
-        export FFLAGS="-arch x86_64"
-        export LDFLAGS="-arch x86_64"
-        unset LDSHARED
-        # Force rebuild of all libs
-        rm *-stamp
-        pre_build
-        # Build wheel
-        export LDFLAGS="$LDFLAGS $py_ld_flags"
-        export LDSHARED="clang $LDFLAGS $py_ld_flags"
-        build_pip_wheel "$repo_dir"
-        # Fuse into dual arch wheel(s)
-        for whl in ${wheelhouse}/*.whl; do
-            delocate-fuse "$whl" "${wheelhouse32}/$(basename $whl)"
-        done
-    }
-fi
 
