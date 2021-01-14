@@ -47,6 +47,7 @@ jobs:
         pip install virtualenv
     - name: Build and Install Wheels
       run: |
+        sudo xcode-select -switch /Applications/Xcode_12.2.app
         source multibuild/common_utils.sh
         source multibuild/travis_steps.sh
         echo "------ BEFORE BUILD ---------"
