@@ -19,11 +19,11 @@ function build_simple2 {
 
 function pre_build {
     set -x
-    build_simple2 gmp  6.1.2 https://gmplib.org/download/gmp tar.bz2 \
+    build_simple2 gmp  6.2.1 https://gmplib.org/download/gmp tar.bz2 \
         --disable-shared --enable-static --with-pic --enable-fat
-    build_simple2 mpfr 3.1.5 http://ftp.gnu.org/gnu/mpfr tar.gz     \
+    build_simple2 mpfr 4.1.0 http://ftp.gnu.org/gnu/mpfr tar.gz     \
         --disable-shared --enable-static --with-pic --with-gmp=$BUILD_PREFIX --disable-thread-safe --enable-gmp-internals
-    build_simple2 mpc  1.0.3 http://www.multiprecision.org/mpc/download tar.gz \
+    build_simple2 mpc  1.2.1 https://ftp.gnu.org/gnu/mpc tar.gz \
         --disable-shared --enable-static --with-pic --with-gmp=$BUILD_PREFIX --with-mpfr=$BUILD_PREFIX
 }
 
