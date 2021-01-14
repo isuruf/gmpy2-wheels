@@ -19,8 +19,11 @@ function build_simple2 {
 
 function pre_build {
     set -x
+    if [[ "$PLAT" == "arm64" ]]; then
+        configure_options="--host=$host_alias"
+    fi
     build_simple2 gmp  6.2.1 https://gmplib.org/download/gmp tar.bz2 \
-        --disable-shared --enable-static --with-pic --enable-fat
+        --disable-shared --enable-static --with-pic --enable-fat $configure_options
     build_simple2 mpfr 4.1.0 http://ftp.gnu.org/gnu/mpfr tar.gz     \
         --disable-shared --enable-static --with-pic --with-gmp=$BUILD_PREFIX --disable-thread-safe --enable-gmp-internals
     build_simple2 mpc  1.2.1 https://ftp.gnu.org/gnu/mpc tar.gz \
