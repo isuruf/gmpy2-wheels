@@ -20,6 +20,8 @@ function build_simple2 {
 function pre_build {
     set -x
     if [[ "$PLAT" == "arm64" ]]; then
+        # gmp has a custom configure script that doesn't use host_alias
+        # mpfr, mpc don't need this
         configure_options="--host=$host_alias"
     fi
     build_simple2 gmp  6.2.1 https://gmplib.org/download/gmp tar.bz2 \
