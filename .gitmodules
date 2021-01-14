@@ -1,6 +1,6 @@
 [submodule "multibuild"]
 	path = multibuild
-	url = https://github.com/matthew-brett/multibuild
+	url = https://github.com/isuruf/multibuild
 [submodule "gmpy2"]
 	path = gmpy2
 	url = https://github.com/aleaxit/gmpy
