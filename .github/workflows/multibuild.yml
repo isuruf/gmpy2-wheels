@@ -47,7 +47,8 @@ jobs:
         pip install virtualenv
     - name: Build and Install Wheels
       run: |
-        source travis-ci/build_steps.sh
+        source multibuild/common_utils.sh
+        source multibuild/travis_steps.sh
         echo "------ BEFORE BUILD ---------"
         before_build
         echo "------ CLEAN CODE --------"
