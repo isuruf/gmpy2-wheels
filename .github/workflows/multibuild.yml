@@ -24,6 +24,7 @@ jobs:
       TRAVIS_PYTHON_VERSION: ${{ matrix.MB_PYTHON_VERSION }}
       BUILD_DIR: ${{ github.workspace }}
       PLAT: ${{ matrix.PLAT }}
+      BUILD_COMMIT: master
 
     steps:
     - uses: actions/checkout@v2
