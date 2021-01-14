@@ -16,7 +16,7 @@ jobs:
         os: [macos-latest]
         platform: [x64]
         PLAT: [arm64, x86_64, universal2]
-        INTERFACE64: ['3.9']
+        MB_PYTHON_VERSION: ['3.9']
     env:
       REPO_DIR: gmpy2
       MACOSX_DEPLOYMENT_TARGET: 10.9
