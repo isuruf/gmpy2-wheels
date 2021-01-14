@@ -60,3 +60,5 @@ jobs:
         clean_code $REPO_DIR
         echo "------ BUILD WHEEL --------"
         build_wheel $REPO_DIR $PLAT
+        echo "------ TEST WHEEL --------"
+        install_run $PLAT
