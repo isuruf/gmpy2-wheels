@@ -61,6 +61,6 @@ jobs:
         echo "------ BUILD WHEEL --------"
         build_wheel $REPO_DIR $PLAT
         echo "------ TEST WHEEL --------"
-        if [[ "$PLAT" != "arm64" ]];
+        if [[ "$PLAT" != "arm64" ]]; then
             install_run $PLAT
         fi
